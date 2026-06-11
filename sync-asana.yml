@@ -1,0 +1,96 @@
+name: Sync from Asana
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch:        # manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Asana projects and write programs.json
+        env:
+          ASANA_TOKEN: ${{ secrets.ASANA_TOKEN }}
+          ASANA_PROJECT_GID: ${{ secrets.ASANA_PROJECT_GID }}
+        run: |
+          node - <<'EOF'
+          const https = require('https');
+
+          const TOKEN = process.env.ASANA_TOKEN;
+          const PROJECT_GID = process.env.ASANA_PROJECT_GID;
+
+          if (!TOKEN || !PROJECT_GID) {
+            console.error('Missing ASANA_TOKEN or ASANA_PROJECT_GID secrets.');
+            process.exit(1);
+          }
+
+          function get(path) {
+            return new Promise((resolve, reject) => {
+              const opts = {
+                hostname: 'app.asana.com',
+                path: `/api/1.0${path}`,
+                headers: { Authorization: `Bearer ${TOKEN}`, Accept: 'application/json' }
+              };
+              https.get(opts, res => {
+                let body = '';
+                res.on('data', d => body += d);
+                res.on('end', () => resolve(JSON.parse(body).data));
+              }).on('error', reject);
+            });
+          }
+
+          async function main() {
+            // Fetch all sections (treated as programs)
+            const sections = await get(`/projects/${PROJECT_GID}/sections?opt_fields=name,gid`);
+
+            const programs = [];
+            for (const section of sections) {
+              // Fetch tasks in section as milestones
+              const tasks = await get(
+                `/sections/${section.gid}/tasks?opt_fields=name,completed,due_on&limit=10`
+              );
+
+              // Pull start/end from first and last task due dates
+              const dated = tasks.filter(t => t.due_on).sort((a, b) => a.due_on.localeCompare(b.due_on));
+              const startDate = dated[0]?.due_on ?? null;
+              const endDate   = dated[dated.length - 1]?.due_on ?? null;
+
+              // Determine status from task completion
+              const allDone  = tasks.length > 0 && tasks.every(t => t.completed);
+              const anyDone  = tasks.some(t => t.completed);
+              const status   = allDone ? 'completed' : anyDone ? 'active' : 'active';
+
+              programs.push({
+                id: section.gid,
+                name: section.name,
+                status,
+                startDate,
+                endDate,
+                milestones: tasks.map(t => ({
+                  name: t.name,
+                  date: t.due_on,
+                  completed: t.completed
+                }))
+              });
+            }
+
+            require('fs').writeFileSync('programs.json', JSON.stringify(programs, null, 2));
+            console.log(`Wrote ${programs.length} programs to programs.json`);
+          }
+
+          main().catch(e => { console.error(e); process.exit(1); });
+          EOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add programs.json
+          git diff --cached --quiet || git commit -m "chore: sync programs from Asana [skip ci]"
+          git push
