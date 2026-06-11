@@ -126,10 +126,8 @@
       ]
     }
   ];
-  // ─────────────────────────────────────────────────────────────────────
   </script>
   <style>
-    /* ── Tokens ── */
     :root {
       --bg:               #f5f6f8;
       --surface:          #ffffff;
@@ -142,16 +140,13 @@
       --active-dot:       #27ae60;
       --hold-bg:          #fff8e6;
       --hold-border:      #f39c12;
-      --hold-dot:         #f39c12;
       --completed-bg:     #f0f2f5;
       --completed-border: #aab0bb;
-      --completed-dot:    #aab0bb;
       --milestone-done:   #27ae60;
       --milestone-upcoming:#3b82f6;
       --milestone-overdue: #e74c3c;
       --today-tint:       #eff6ff;
       --today-accent:     #3b82f6;
-      --toolbar-bg:       #ffffff;
     }
 
     [data-theme="dark"] {
@@ -166,16 +161,13 @@
       --active-dot:       #2ecc71;
       --hold-bg:          #1f1600;
       --hold-border:      #f39c12;
-      --hold-dot:         #f39c12;
       --completed-bg:     #16181f;
       --completed-border: #3a4050;
-      --completed-dot:    #3a4050;
       --milestone-done:   #2ecc71;
       --milestone-upcoming:#60a5fa;
       --milestone-overdue: #f87171;
       --today-tint:       #1a2535;
       --today-accent:     #60a5fa;
-      --toolbar-bg:       #1c1f26;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -185,14 +177,14 @@
       background: var(--bg);
       color: var(--text-primary);
       min-height: 100vh;
-      transition: background 0.2s, color 0.2s;
+      transition: background .2s, color .2s;
     }
 
     /* ── Header ── */
     header {
       background: var(--surface);
       border-bottom: 2px solid var(--border);
-      height: 72px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -201,27 +193,25 @@
       top: 0;
       z-index: 20;
     }
-
     .header-left { display: flex; align-items: baseline; gap: 14px; }
-    .logo-text { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
-    .logo-sub  { font-size: 15px; font-weight: 500; color: var(--text-secondary); }
-
+    .logo-text   { font-size: 26px; font-weight: 800; letter-spacing: -.5px; }
+    .logo-sub    { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
     .header-right { text-align: right; }
-    #clock { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    #date-display { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+    #clock        { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    #date-display { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
     /* ── Toolbar ── */
     .toolbar {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 40px;
-      background: var(--toolbar-bg);
+      gap: 10px;
+      padding: 9px 40px;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
       position: sticky;
-      top: 72px;
+      top: 70px;
       z-index: 19;
+      flex-wrap: wrap;
     }
 
     .pill-group {
@@ -229,11 +219,11 @@
       gap: 3px;
       background: var(--bg);
       border-radius: 10px;
-      padding: 4px;
+      padding: 3px;
     }
 
     .pill-btn {
-      padding: 7px 16px;
+      padding: 6px 14px;
       border: none;
       border-radius: 7px;
       background: transparent;
@@ -241,37 +231,23 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all .15s;
       white-space: nowrap;
     }
-
     .pill-btn:hover { color: var(--text-primary); }
-
     .pill-btn.active {
       background: var(--surface);
       color: var(--text-primary);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0,0,0,.1);
     }
 
-    .toolbar-sep {
-      width: 1px;
-      height: 28px;
-      background: var(--border);
-    }
-
-    .sort-label {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      color: var(--text-muted);
-    }
+    .toolbar-sep { width: 1px; height: 26px; background: var(--border); }
+    .sort-label  { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-muted); }
 
     #sort-controls { display: flex; align-items: center; gap: 8px; }
 
-    .theme-btn {
-      margin-left: auto;
-      padding: 7px 14px;
+    .icon-btn {
+      padding: 6px 13px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--surface);
@@ -279,106 +255,97 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: background .15s;
+      white-space: nowrap;
     }
-    .theme-btn:hover { background: var(--bg); }
+    .icon-btn:hover { background: var(--bg); }
+    .icon-btn.active-filter {
+      background: var(--active-bg);
+      border-color: var(--active-border);
+      color: var(--active-border);
+    }
 
     /* ── Stats bar ── */
     .stats-bar {
       display: flex;
       gap: 20px;
-      padding: 12px 40px;
+      padding: 10px 40px;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
     }
-
-    .stat-chip {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .stat-chip .dot { width: 9px; height: 9px; border-radius: 50%; }
-    .stat-chip .count { font-size: 19px; font-weight: 800; color: var(--text-primary); }
+    .stat-chip { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+    .stat-chip .dot   { width: 8px; height: 8px; border-radius: 50%; }
+    .stat-chip .count { font-size: 18px; font-weight: 800; color: var(--text-primary); }
 
     /* ── Cards grid ── */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-      gap: 22px;
-      padding: 28px 40px;
+      gap: 20px;
+      padding: 26px 40px;
     }
 
-    /* ── Program Card ── */
     .card {
       background: var(--surface);
       border-radius: 14px;
       border: 1px solid var(--border);
-      padding: 22px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 13px;
     }
 
     .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .card-title  { font-size: 18px; font-weight: 700; line-height: 1.3; }
+    .card-title  { font-size: 17px; font-weight: 700; line-height: 1.3; }
 
     .status-badge {
       flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 5px;
-      padding: 5px 11px;
+      padding: 4px 10px;
       border-radius: 99px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .5px;
+      letter-spacing: .4px;
       border: 1.5px solid transparent;
     }
+    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
 
-    .status-badge .dot { width: 7px; height: 7px; border-radius: 50%; }
-
-    .status-badge.active    { background:var(--active-bg);    border-color:var(--active-border);    color:var(--active-border);    }
+    .status-badge.active    { background:var(--active-bg);    border-color:var(--active-border);    color:var(--active-border); }
     .status-badge.active .dot { background:var(--active-dot); animation: pulse 2s infinite; }
-    .status-badge.on-hold   { background:var(--hold-bg);      border-color:var(--hold-border);      color:var(--hold-border);      }
-    .status-badge.on-hold .dot { background:var(--hold-dot); }
+    .status-badge.on-hold   { background:var(--hold-bg);      border-color:var(--hold-border);      color:var(--hold-border); }
+    .status-badge.on-hold .dot { background:var(--hold-border); }
     .status-badge.completed { background:var(--completed-bg); border-color:var(--completed-border); color:var(--completed-border); }
-    .status-badge.completed .dot { background:var(--completed-dot); }
+    .status-badge.completed .dot { background:var(--completed-border); }
 
-    .card-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text-secondary); }
-    .meta-item { display: flex; align-items: center; gap: 5px; }
-    .lead-tag  { display:inline-flex; align-items:center; gap:5px; background:var(--bg); border-radius:7px; padding:3px 9px; font-size:11px; font-weight:600; color:var(--text-secondary); }
+    .card-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--text-secondary); }
+    .lead-tag  { background:var(--bg); border-radius:6px; padding:2px 8px; font-size:11px; font-weight:600; color:var(--text-secondary); }
 
-    .progress-row { display: flex; flex-direction: column; gap: 5px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--text-muted); }
-    .progress-track { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .progress-fill  { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #3b82f6, #6366f1); }
-    .progress-fill.complete { background: linear-gradient(90deg, #27ae60, #16a085); }
+    .progress-row  { display:flex; flex-direction:column; gap:4px; }
+    .progress-label{ display:flex; justify-content:space-between; font-size:11px; font-weight:600; color:var(--text-muted); }
+    .progress-track{ height:5px; background:var(--border); border-radius:99px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#3b82f6,#6366f1); }
+    .progress-fill.complete { background:linear-gradient(90deg,#27ae60,#16a085); }
 
-    .milestones-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); margin-bottom: 6px; }
+    .milestones-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-muted); margin-bottom:5px; }
+    .milestone-list   { display:flex; flex-direction:column; gap:6px; }
+    .milestone        { display:flex; align-items:center; gap:7px; font-size:12px; }
+    .milestone-icon   { width:16px; height:16px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:9px; }
+    .milestone-icon.done     { background:var(--milestone-done); color:white; }
+    .milestone-icon.upcoming { background:#dbeafe; color:var(--milestone-upcoming); border:1.5px solid var(--milestone-upcoming); }
+    .milestone-icon.overdue  { background:#fde8e8; color:var(--milestone-overdue);  border:1.5px solid var(--milestone-overdue); }
+    [data-theme="dark"] .milestone-icon.upcoming { background:#1e3a5f; }
+    [data-theme="dark"] .milestone-icon.overdue  { background:#3b1515; }
+    .milestone-name.done    { color:var(--text-muted); text-decoration:line-through; }
+    .milestone-date         { font-size:11px; color:var(--text-muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+    .milestone-date.overdue { color:var(--milestone-overdue); font-weight:700; }
 
-    .milestone { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-    .milestone-icon { width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; }
-    .milestone-icon.done     { background: var(--milestone-done);     color: white; }
-    .milestone-icon.upcoming { background: #dbeafe; color: var(--milestone-upcoming); border: 1.5px solid var(--milestone-upcoming); }
-    .milestone-icon.overdue  { background: #fde8e8; color: var(--milestone-overdue);  border: 1.5px solid var(--milestone-overdue); }
+    .empty { grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--text-muted); font-size:18px; }
 
-    [data-theme="dark"] .milestone-icon.upcoming { background: #1e3a5f; }
-    [data-theme="dark"] .milestone-icon.overdue  { background: #3b1515; }
-
-    .milestone-name           { flex: 1; color: var(--text-primary); }
-    .milestone-name.done      { color: var(--text-muted); text-decoration: line-through; }
-    .milestone-date           { font-size: 11px; color: var(--text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
-    .milestone-date.overdue   { color: var(--milestone-overdue); font-weight: 700; }
-
-    .empty { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--text-muted); font-size: 18px; }
-
-    /* ── Monthly Calendar ── */
-    .cal-container { padding: 24px 40px 32px; }
+    /* ── Monthly Gantt ── */
+    .gantt-container { padding: 24px 40px 32px; }
 
     .cal-nav {
       display: flex;
@@ -387,132 +354,184 @@
       gap: 20px;
       margin-bottom: 18px;
     }
-
     .cal-nav-btn {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 7px 18px;
+      padding: 6px 18px;
       font-size: 18px;
+      font-weight: 700;
       cursor: pointer;
       color: var(--text-primary);
-      font-weight: 700;
-      transition: background 0.15s;
+      transition: background .15s;
     }
     .cal-nav-btn:hover { background: var(--bg); }
-
     .cal-month-label {
       font-size: 22px;
       font-weight: 800;
-      color: var(--text-primary);
       min-width: 210px;
       text-align: center;
     }
 
-    .cal-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 2px;
-      background: var(--border);
-      border: 2px solid var(--border);
-      border-radius: 14px;
+    .gantt-chart {
+      border: 1px solid var(--border);
+      border-radius: 12px;
       overflow: hidden;
+      background: var(--surface);
     }
 
-    .cal-header-cell {
-      background: var(--surface);
-      text-align: center;
-      padding: 10px 4px;
-      font-size: 11px;
+    /* Header row */
+    .gantt-header-row {
+      display: flex;
+      background: var(--bg);
+      border-bottom: 2px solid var(--border);
+    }
+    .gantt-hdr-name {
+      width: 200px;
+      min-width: 200px;
+      padding: 8px 14px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .8px;
+      letter-spacing: .6px;
       color: var(--text-muted);
+      border-right: 2px solid var(--border);
+      flex-shrink: 0;
     }
-
-    .cal-cell {
-      background: var(--surface);
-      min-height: 110px;
-      padding: 8px;
+    .gantt-hdr-days {
+      flex: 1;
       display: flex;
-      flex-direction: column;
-      gap: 3px;
+      min-width: 0;
     }
-
-    .cal-cell.outside  { background: var(--bg); opacity: .5; }
-    .cal-cell.today    { background: var(--today-tint); }
-
-    .cal-strips { display: flex; gap: 2px; height: 5px; margin-bottom: 3px; }
-    .cal-strip  { flex: 1; height: 5px; border-radius: 3px; }
-
-    .cal-date {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-bottom: 2px;
-    }
-    .cal-cell.today .cal-date { color: var(--today-accent); }
-    .cal-today-badge {
-      display: inline-block;
-      background: var(--today-accent);
-      color: white;
-      border-radius: 99px;
-      padding: 1px 7px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-left: 4px;
-    }
-
-    .cal-milestone-pill {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    .gantt-hdr-day {
+      flex: 1;
+      text-align: center;
+      padding: 5px 2px 4px;
       font-size: 10px;
       font-weight: 600;
-      color: var(--text-primary);
-      background: var(--bg);
-      border-radius: 4px;
-      padding: 2px 5px;
-      overflow: hidden;
-      border-left: 3px solid transparent;
-      line-height: 1.3;
+      color: var(--text-muted);
+      border-right: 1px solid var(--border);
+      line-height: 1.2;
+      min-width: 0;
     }
-
-    .cal-milestone-name {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .gantt-hdr-day:last-child { border-right: none; }
+    .gantt-hdr-day .day-num {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-secondary);
+      line-height: 1;
     }
+    .gantt-hdr-day.is-today { background: var(--today-tint); }
+    .gantt-hdr-day.is-today .day-num { color: var(--today-accent); }
+    .gantt-hdr-day.is-weekend { opacity: .45; }
 
-    .cal-legend {
+    /* Program rows */
+    .gantt-prog-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-      padding: 12px 16px;
-      background: var(--surface);
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      min-height: 46px;
     }
+    .gantt-prog-row:last-child { border-bottom: none; }
 
-    .cal-legend-item {
+    .gantt-prog-name-cell {
+      width: 200px;
+      min-width: 200px;
+      flex-shrink: 0;
+      padding: 0 12px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      border-right: 2px solid var(--border);
       font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
     }
-
-    .cal-legend-dot {
-      width: 10px;
-      height: 10px;
+    .gantt-prog-name-cell.inactive { color: var(--text-muted); }
+    .prog-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
+    /* The timeline track */
+    .gantt-track {
+      flex: 1;
+      position: relative;
+      min-height: 46px;
+      overflow: visible;
+    }
+
+    /* Program bar — absolutely positioned within track */
+    .gantt-bar {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      display: flex;
+      align-items: center;
+      overflow: visible;
+      z-index: 1;
+    }
+    .gantt-bar-name {
+      padding: 0 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,.95);
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0,0,0,.4);
+      pointer-events: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Milestone marker — positioned on track, overlaying the bar */
+    .gantt-ms {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .gantt-ms-tag {
+      font-size: 10px;
+      font-weight: 800;
+      color: white;
+      background: rgba(0,0,0,.35);
+      border: 1.5px solid rgba(255,255,255,.55);
+      border-radius: 3px;
+      padding: 2px 5px;
+      white-space: nowrap;
+      letter-spacing: .2px;
+    }
+    .gantt-ms.done .gantt-ms-tag {
+      background: rgba(0,0,0,.2);
+      border-color: rgba(255,255,255,.35);
+      opacity: .7;
+    }
+    .gantt-ms.overdue .gantt-ms-tag {
+      background: rgba(220,38,38,.75);
+      border-color: rgba(255,255,255,.6);
+    }
+
+    /* Today vertical line through track */
+    .gantt-today-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--today-accent);
+      opacity: .5;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     /* ── 2-Week View ── */
-    .twoweek-container { padding: 24px 40px 32px; overflow-x: auto; }
+    .twoweek-container { padding: 24px 40px 32px; }
 
     .twoweek-nav {
       display: flex;
@@ -521,12 +540,10 @@
       gap: 20px;
       margin-bottom: 18px;
     }
-
     .twoweek-range-label {
       font-size: 18px;
       font-weight: 800;
-      color: var(--text-primary);
-      min-width: 280px;
+      min-width: 260px;
       text-align: center;
     }
 
@@ -535,113 +552,95 @@
     .twoweek-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 800px;
     }
-
-    .twoweek-table thead tr {
-      border-bottom: 2px solid var(--border);
-    }
+    .twoweek-table thead tr { border-bottom: 2px solid var(--border); }
 
     .twoweek-th-prog {
       text-align: left;
-      padding: 8px 14px;
+      padding: 7px 14px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .6px;
       color: var(--text-muted);
-      min-width: 200px;
-      width: 200px;
+      min-width: 190px;
+      width: 190px;
     }
-
     .twoweek-th-day {
       text-align: center;
-      padding: 6px 2px;
-      font-size: 11px;
+      padding: 5px 2px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--text-muted);
-      width: 7%;
+      width: 6.5%;
     }
-
     .twoweek-th-day.is-today { color: var(--today-accent); }
-    .twoweek-th-day.is-weekend { opacity: .55; }
-
+    .twoweek-th-day.is-weekend { opacity: .5; }
     .twoweek-th-day .tw-day-num {
       display: block;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: var(--text-primary);
       line-height: 1;
     }
-
     .twoweek-th-day.is-today .tw-day-num { color: var(--today-accent); }
 
     .twoweek-row td { border-bottom: 1px solid var(--border); }
-
     .twoweek-prog-cell {
-      padding: 10px 14px;
-      font-size: 13px;
+      padding: 9px 14px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--text-primary);
       border-right: 2px solid var(--border);
       white-space: nowrap;
       vertical-align: middle;
     }
-
     .twoweek-prog-status {
       display: block;
       font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .5px;
+      letter-spacing: .4px;
       margin-top: 2px;
     }
-
     .twoweek-day-cell {
-      padding: 6px 3px;
+      padding: 5px 3px;
       text-align: center;
       vertical-align: middle;
       position: relative;
-      min-height: 56px;
+      min-height: 52px;
     }
-
-    .twoweek-day-cell.is-today { background: rgba(59,130,246,.05); }
-    .twoweek-day-cell.is-weekend { background: var(--bg); opacity: .7; }
-    .twoweek-day-cell.is-active { /* program is running this day */ }
+    .twoweek-day-cell.is-today  { background: rgba(59,130,246,.05); }
+    .twoweek-day-cell.is-weekend{ background: var(--bg); opacity: .7; }
 
     .twoweek-bar-bg {
       position: absolute;
-      top: 8px; bottom: 8px;
-      left: 0; right: 0;
+      top: 6px; bottom: 6px; left: 0; right: 0;
       border-radius: 3px;
       opacity: .12;
       pointer-events: none;
     }
-
     .twoweek-milestone-bubble {
       position: relative;
       z-index: 1;
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
-      max-width: 100%;
+      gap: 2px;
     }
-
     .tw-bubble-dot {
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       border: 2px solid var(--surface);
       box-shadow: 0 1px 4px rgba(0,0,0,.2);
-      flex-shrink: 0;
     }
-
     .tw-bubble-label {
       font-size: 9px;
       font-weight: 700;
       color: var(--text-primary);
-      max-width: 80px;
+      max-width: 75px;
       text-align: center;
       line-height: 1.2;
       overflow: hidden;
@@ -649,22 +648,12 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
-
-    .twoweek-empty {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
-      font-size: 15px;
-    }
+    .twoweek-empty { text-align:center; padding:40px; color:var(--text-muted); font-size:15px; }
 
     /* ── Footer ── */
-    .refresh-bar { text-align: center; padding: 14px; font-size: 11px; color: var(--text-muted); }
+    .refresh-bar { text-align:center; padding:12px; font-size:11px; color:var(--text-muted); }
 
-    /* ── Animations ── */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: .4; }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
   </style>
 </head>
 <body>
@@ -681,14 +670,12 @@
 </header>
 
 <div class="toolbar">
-  <!-- View switcher -->
   <div class="pill-group" id="view-tabs">
     <button class="pill-btn active" data-view="cards">Cards</button>
     <button class="pill-btn" data-view="monthly">Monthly</button>
     <button class="pill-btn" data-view="twoweek">2-Week</button>
   </div>
 
-  <!-- Sort controls (cards only) -->
   <div id="sort-controls">
     <div class="toolbar-sep"></div>
     <span class="sort-label">Sort</span>
@@ -701,7 +688,9 @@
     </div>
   </div>
 
-  <button class="theme-btn" id="theme-toggle">🌙 Dark</button>
+  <div class="toolbar-sep"></div>
+  <button class="icon-btn" id="inactive-toggle">Hide Completed</button>
+  <button class="icon-btn" id="theme-toggle" style="margin-left:auto">🌙 Dark</button>
 </div>
 
 <div class="stats-bar" id="stats-bar"></div>
@@ -709,57 +698,48 @@
 <div class="refresh-bar" id="refresh-bar">Auto-refreshes every 5 minutes</div>
 
 <script>
-  // ── Config ────────────────────────────────────────────────────────────
+  // ── Constants ─────────────────────────────────────────────────────────
   const PROG_COLORS = [
     '#3b82f6','#8b5cf6','#06b6d4','#f59e0b',
     '#10b981','#6366f1','#94a3b8','#64748b','#78716c'
   ];
-
   const STATUS_LABELS = { active:'Active', 'on-hold':'On Hold', completed:'Completed' };
-  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTHS = ['January','February','March','April','May','June',
                   'July','August','September','October','November','December'];
 
   // ── State ─────────────────────────────────────────────────────────────
   let currentView = 'cards';
   let currentSort = 'status';
-  let calYear, calMonth, twOffset = 0;
-  const now = new Date();
-  calYear  = now.getFullYear();
-  calMonth = now.getMonth();
+  let hideInactive = false;
+  let twOffset = 0;
+  const _now = new Date();
+  let calYear = _now.getFullYear(), calMonth = _now.getMonth();
 
-  // Dark mode — persisted
-  const savedTheme = localStorage.getItem('gfn-theme') || 'light';
-  applyTheme(savedTheme);
+  // Theme
+  applyTheme(localStorage.getItem('gfn-theme') || 'light');
 
   // ── Helpers ───────────────────────────────────────────────────────────
-  function color(idx) { return PROG_COLORS[idx % PROG_COLORS.length]; }
-
   function colorFor(prog) {
-    return color(window.PROGRAMS.findIndex(p => p.id === prog.id));
+    const idx = window.PROGRAMS.findIndex(p => p.id === prog.id);
+    return PROG_COLORS[idx % PROG_COLORS.length];
   }
 
-  function fmt(dateStr) {
-    if (!dateStr) return '—';
-    const d = new Date(dateStr + 'T12:00:00');
+  function fmt(s) {
+    if (!s) return '—';
+    const d = new Date(s + 'T12:00:00');
     return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
   }
 
-  function fmtShort(dateStr) {
-    if (!dateStr) return '—';
-    const d = new Date(dateStr + 'T12:00:00');
+  function fmtShort(s) {
+    if (!s) return '—';
+    const d = new Date(s + 'T12:00:00');
     return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
   }
 
-  function daysLeft(dateStr) {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const end   = new Date(dateStr + 'T00:00:00');
-    return Math.round((end - today) / 86400000);
-  }
-
-  function toDate(str) {
-    if (!str) return null;
-    return new Date(str + 'T00:00:00');
+  function daysLeft(s) {
+    const t = new Date(); t.setHours(0,0,0,0);
+    return Math.round((new Date(s + 'T00:00:00') - t) / 86400000);
   }
 
   function dateKey(d) {
@@ -767,13 +747,13 @@
   }
 
   function programProgress(p) {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const start = toDate(p.startDate);
-    const end   = toDate(p.endDate);
-    if (!start || !end) return 0;
-    if (today <= start) return 0;
-    if (today >= end)   return 100;
-    return Math.round(((today - start) / (end - start)) * 100);
+    const t = new Date(); t.setHours(0,0,0,0);
+    if (!p.startDate || !p.endDate) return 0;
+    const s = new Date(p.startDate + 'T00:00:00');
+    const e = new Date(p.endDate   + 'T00:00:00');
+    if (t <= s) return 0;
+    if (t >= e) return 100;
+    return Math.round((t - s) / (e - s) * 100);
   }
 
   function milestoneState(m) {
@@ -781,9 +761,14 @@
     return daysLeft(m.date) < 0 ? 'overdue' : 'upcoming';
   }
 
+  function getVisiblePrograms() {
+    if (!hideInactive) return window.PROGRAMS;
+    return window.PROGRAMS.filter(p => p.status === 'active');
+  }
+
   function getSorted() {
     const order = { active:0, 'on-hold':1, completed:2 };
-    const arr = [...window.PROGRAMS];
+    const arr = [...getVisiblePrograms()];
     switch (currentSort) {
       case 'name':     return arr.sort((a,b) => a.name.localeCompare(b.name));
       case 'progress': return arr.sort((a,b) => programProgress(b) - programProgress(a));
@@ -802,73 +787,68 @@
 
   // ── Stats ─────────────────────────────────────────────────────────────
   function renderStats() {
+    const all = window.PROGRAMS;
     const counts = { active:0, 'on-hold':0, completed:0 };
-    window.PROGRAMS.forEach(p => counts[p.status] = (counts[p.status]||0) + 1);
+    all.forEach(p => counts[p.status] = (counts[p.status]||0) + 1);
     document.getElementById('stats-bar').innerHTML =
-      [{ key:'active',    label:'Active',    c:'#27ae60' },
-       { key:'on-hold',   label:'On Hold',   c:'#f39c12' },
+      [{ key:'active', label:'Active', c:'#27ae60' },
+       { key:'on-hold', label:'On Hold', c:'#f39c12' },
        { key:'completed', label:'Completed', c:'#aab0bb' }]
-      .map(({ key, label, c }) => `
+      .map(({key,label,c}) => `
         <div class="stat-chip">
           <div class="dot" style="background:${c}"></div>
           <span class="count">${counts[key]||0}</span>
           <span>${label}</span>
-        </div>`)
-      .join('<div style="flex:1"></div>') +
+        </div>`).join('<div style="flex:1"></div>') +
       `<div class="stat-chip" style="margin-left:auto">
-         <span style="font-size:12px;color:var(--text-muted)">${window.PROGRAMS.length} programs total</span>
+         <span style="font-size:12px;color:var(--text-muted)">${all.length} programs total</span>
        </div>`;
   }
 
-  // ── Cards View ────────────────────────────────────────────────────────
+  // ── Cards ─────────────────────────────────────────────────────────────
   function renderCard(p) {
     const progress = programProgress(p);
-    const dl       = daysLeft(p.endDate);
-    const isComp   = p.status === 'completed';
-    const c        = colorFor(p);
-
-    const daysLabel = isComp    ? 'Ended' :
-                      dl < 0    ? `Ended ${Math.abs(dl)}d ago` :
-                      dl === 0  ? 'Ends today' : `${dl}d remaining`;
-
-    const milestones = (p.milestones || []).slice(0, 4);
-
+    const dl = daysLeft(p.endDate);
+    const isComp = p.status === 'completed';
+    const c = colorFor(p);
+    const daysLabel = isComp ? 'Ended' :
+      dl < 0  ? `Ended ${Math.abs(dl)}d ago` :
+      dl === 0 ? 'Ends today' : `${dl}d remaining`;
+    const ms = (p.milestones||[]).slice(0,4);
     return `
-      <div class="card" style="border-top: 3px solid ${c}">
+      <div class="card" style="border-top:3px solid ${c}">
         <div class="card-header">
           <div class="card-title">${p.name}</div>
           <div class="status-badge ${p.status}">
             <div class="dot"></div>${STATUS_LABELS[p.status]||p.status}
           </div>
         </div>
-
         <div class="card-meta">
-          <div class="meta-item">📅 ${fmt(p.startDate)} – ${fmt(p.endDate)}</div>
-          ${p.lead ? `<div class="meta-item"><span class="lead-tag">👤 ${p.lead}</span></div>` : ''}
-          <div class="meta-item" style="margin-left:auto;font-weight:700;color:${dl < 7 && !isComp ? 'var(--milestone-overdue)' : 'var(--text-muted)'}">
+          <span>📅 ${fmt(p.startDate)} – ${fmt(p.endDate)}</span>
+          ${p.lead ? `<span class="lead-tag">👤 ${p.lead}</span>` : ''}
+          <span style="margin-left:auto;font-weight:700;color:${dl < 7 && !isComp ? 'var(--milestone-overdue)' : 'var(--text-muted)'}">
             ${daysLabel}
-          </div>
+          </span>
         </div>
-
         <div class="progress-row">
           <div class="progress-label"><span>Timeline Progress</span><span>${progress}%</span></div>
           <div class="progress-track">
-            <div class="progress-fill ${progress >= 100 ? 'complete' : ''}" style="width:${progress}%"></div>
+            <div class="progress-fill ${progress>=100?'complete':''}" style="width:${progress}%"></div>
           </div>
         </div>
-
-        ${milestones.length ? `
-        <div>
+        ${ms.length ? `<div>
           <div class="milestones-label">Milestones</div>
-          ${milestones.map(m => {
-            const state = milestoneState(m);
-            const icon  = state === 'done' ? '✓' : state === 'overdue' ? '!' : '○';
-            return `<div class="milestone">
-              <div class="milestone-icon ${state}">${icon}</div>
-              <span class="milestone-name ${state}">${m.name}</span>
-              <span class="milestone-date ${state === 'overdue' ? 'overdue' : ''}">${fmt(m.date)}</span>
-            </div>`;
-          }).join('')}
+          <div class="milestone-list">
+            ${ms.map(m => {
+              const state = milestoneState(m);
+              const icon = state==='done'?'✓':state==='overdue'?'!':'○';
+              return `<div class="milestone">
+                <div class="milestone-icon ${state}">${icon}</div>
+                <span class="milestone-name ${state==='done'?'done':''}" style="flex:1">${m.name}</span>
+                <span class="milestone-date ${state==='overdue'?'overdue':''}">${fmt(m.date)}</span>
+              </div>`;
+            }).join('')}
+          </div>
         </div>` : ''}
       </div>`;
   }
@@ -876,97 +856,120 @@
   function renderCards() {
     const sorted = getSorted();
     return `<div class="grid">${
-      sorted.length ? sorted.map(renderCard).join('') : '<div class="empty">No programs found.</div>'
+      sorted.length ? sorted.map(renderCard).join('') : '<div class="empty">No programs to display.</div>'
     }</div>`;
   }
 
-  // ── Monthly Calendar View ─────────────────────────────────────────────
+  // ── Monthly Gantt ─────────────────────────────────────────────────────
   function renderMonthly() {
-    const firstDay  = new Date(calYear, calMonth, 1);
-    const lastDay   = new Date(calYear, calMonth + 1, 0);
-    const startDow  = firstDay.getDay();
-    const totalDays = lastDay.getDate();
-    const todayKey  = dateKey(new Date());
+    const numDays   = new Date(calYear, calMonth + 1, 0).getDate();
+    const todayD    = new Date();
+    const todayDay  = (todayD.getFullYear()===calYear && todayD.getMonth()===calMonth) ? todayD.getDate() : null;
+    const monthStr  = `${calYear}-${String(calMonth+1).padStart(2,'0')}`;
+    const monthStart = `${monthStr}-01`;
+    const monthEnd   = `${monthStr}-${String(numDays).padStart(2,'0')}`;
 
-    // Build milestone map: day → [{prog, milestone, color}]
-    const msByDay = {};
-    window.PROGRAMS.forEach((prog, idx) => {
-      (prog.milestones || []).forEach(m => {
-        if (!m.date) return;
-        const d = new Date(m.date + 'T12:00:00');
-        if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
-          const k = d.getDate();
-          if (!msByDay[k]) msByDay[k] = [];
-          msByDay[k].push({ prog, m, c: color(idx) });
-        }
-      });
-    });
+    // Helpers for % positioning
+    function dayPct(day)       { return (day - 1) / numDays * 100; }        // left edge of day
+    function dayMidPct(day)    { return (day - 0.5) / numDays * 100; }      // center of day
+    function spanPct(s, e)     { return (e - s + 1) / numDays * 100; }      // width for s..e days
 
-    // Active programs each day (for strip bars)
-    function activeStrips(dayNum) {
-      const d = new Date(calYear, calMonth, dayNum);
-      const dk = dateKey(d);
-      return window.PROGRAMS.map((prog, idx) => ({
-        prog, c: color(idx),
-        active: prog.startDate && prog.endDate && dk >= prog.startDate && dk <= prog.endDate
-      })).filter(x => x.active);
-    }
+    // Column grid line style
+    const colW = (100 / numDays).toFixed(6);
+    const colLines = `repeating-linear-gradient(to right, transparent 0, transparent calc(${colW}% - 1px), var(--border) calc(${colW}% - 1px), var(--border) ${colW}%)`;
 
-    // Build grid cells
-    let cells = '';
-
-    // Leading empty cells
-    for (let i = 0; i < startDow; i++) {
-      cells += `<div class="cal-cell outside"></div>`;
-    }
-
-    // Day cells
-    for (let day = 1; day <= totalDays; day++) {
-      const dStr   = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      const isToday = dStr === todayKey;
-      const strips  = activeStrips(day);
-      const ms      = msByDay[day] || [];
-
-      cells += `<div class="cal-cell ${isToday ? 'today' : ''}">
-        <div class="cal-strips">
-          ${strips.slice(0, 6).map(s => `<div class="cal-strip" style="background:${s.c}"></div>`).join('')}
-        </div>
-        <div class="cal-date">${day}${isToday ? '<span class="cal-today-badge">Today</span>' : ''}</div>
-        ${ms.slice(0, 4).map(({ m, c: mc }) =>
-          `<div class="cal-milestone-pill" style="border-left-color:${mc}">
-            <span class="cal-milestone-name">${m.name}</span>
-          </div>`
-        ).join('')}
-        ${ms.length > 4 ? `<div class="cal-milestone-pill" style="color:var(--text-muted)">+${ms.length - 4} more</div>` : ''}
+    // Day headers
+    const dayHeaders = Array.from({ length: numDays }, (_, i) => {
+      const day = i + 1;
+      const dow = new Date(calYear, calMonth, day).getDay();
+      const isToday   = day === todayDay;
+      const isWeekend = dow === 0 || dow === 6;
+      return `<div class="gantt-hdr-day ${isToday?'is-today':''} ${isWeekend?'is-weekend':''}">
+        <span class="day-num">${day}</span>${DAYS[dow]}
       </div>`;
-    }
+    }).join('');
 
-    // Trailing empty cells to complete the last row
-    const totalCells = startDow + totalDays;
-    const trailing = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-    for (let i = 0; i < trailing; i++) {
-      cells += `<div class="cal-cell outside"></div>`;
-    }
+    // Program rows
+    const visible = getVisiblePrograms();
 
-    // Legend
-    const legend = window.PROGRAMS.map((prog, idx) =>
-      `<div class="cal-legend-item">
-        <div class="cal-legend-dot" style="background:${color(idx)}"></div>
-        <span>${prog.name}</span>
-      </div>`
-    ).join('');
+    const rows = visible.map(prog => {
+      const c = colorFor(prog);
+      const inactive = prog.status !== 'active';
 
-    return `<div class="cal-container">
+      // Does program overlap this month?
+      const overlaps = prog.startDate <= monthEnd && prog.endDate >= monthStart;
+
+      let barHTML = '';
+
+      if (overlaps) {
+        const startDay = prog.startDate < monthStart ? 1 : parseInt(prog.startDate.slice(8));
+        const endDay   = prog.endDate   > monthEnd   ? numDays : parseInt(prog.endDate.slice(8));
+
+        const barLeft  = dayPct(startDay);
+        const barWidth = spanPct(startDay, endDay);
+
+        // Round left edge only if starts in this month, right edge only if ends in this month
+        const rl = prog.startDate >= monthStart ? '5px' : '0';
+        const rr = prog.endDate   <= monthEnd   ? '5px' : '0';
+        const radius = `${rl} ${rr} ${rr} ${rl}`;
+
+        // Bar opacity: completed programs are more muted
+        const barOpacity = inactive ? '0.45' : '1';
+
+        // Milestones in this month
+        const ms = (prog.milestones||[]).filter(m => m.date && m.date.startsWith(monthStr));
+
+        const msHTML = ms.map(m => {
+          const mDay  = parseInt(m.date.slice(8));
+          const mLeft = dayMidPct(mDay);
+          const state = milestoneState(m);
+          return `<div class="gantt-ms ${state}" style="left:${mLeft}%">
+            <span class="gantt-ms-tag">[ ${m.name} ]</span>
+          </div>`;
+        }).join('');
+
+        // Today vertical tick
+        const todayTick = todayDay
+          ? `<div class="gantt-today-line" style="left:${dayMidPct(todayDay)}%"></div>` : '';
+
+        barHTML = `${todayTick}
+          <div class="gantt-bar" style="left:${barLeft}%;width:${barWidth}%;background:${c};border-radius:${radius};opacity:${barOpacity}">
+            <span class="gantt-bar-name">${prog.name}</span>
+          </div>
+          ${msHTML}`;
+      } else {
+        // Not active this month — just show today line if applicable
+        barHTML = todayDay
+          ? `<div class="gantt-today-line" style="left:${dayMidPct(todayDay)}%"></div>` : '';
+      }
+
+      return `<div class="gantt-prog-row">
+        <div class="gantt-prog-name-cell ${inactive?'inactive':''}">
+          <div class="prog-dot" style="background:${c}${inactive?';opacity:.5':''}"></div>
+          ${prog.name}
+        </div>
+        <div class="gantt-track" style="background-image:${colLines}">
+          ${barHTML}
+        </div>
+      </div>`;
+    }).join('');
+
+    const noPrograms = !visible.length
+      ? `<div style="padding:40px;text-align:center;color:var(--text-muted);font-size:15px">No programs to display.</div>` : '';
+
+    return `<div class="gantt-container">
       <div class="cal-nav">
         <button class="cal-nav-btn" id="cal-prev">&#8592;</button>
         <div class="cal-month-label">${MONTHS[calMonth]} ${calYear}</div>
         <button class="cal-nav-btn" id="cal-next">&#8594;</button>
       </div>
-      <div class="cal-grid">
-        ${DAYS.map(d => `<div class="cal-header-cell">${d}</div>`).join('')}
-        ${cells}
+      <div class="gantt-chart">
+        <div class="gantt-header-row">
+          <div class="gantt-hdr-name">Program</div>
+          <div class="gantt-hdr-days">${dayHeaders}</div>
+        </div>
+        ${rows}${noPrograms}
       </div>
-      <div class="cal-legend">${legend}</div>
     </div>`;
   }
 
@@ -979,95 +982,77 @@
       d.setDate(start.getDate() + i);
       return d;
     });
-
-    const todayKey = dateKey(new Date());
+    const todayKey   = dateKey(new Date());
     const rangeStart = dateKey(days[0]);
     const rangeEnd   = dateKey(days[13]);
 
-    // Filter programs that have any overlap with this 14-day window
-    const visible = window.PROGRAMS.filter(p => {
-      const hasOverlap = p.startDate && p.endDate &&
-        p.startDate <= rangeEnd && p.endDate >= rangeStart;
-      const hasMilestone = (p.milestones||[]).some(m => m.date >= rangeStart && m.date <= rangeEnd);
-      return hasOverlap || hasMilestone;
+    const visible = getVisiblePrograms().filter(p => {
+      const overlap = p.startDate <= rangeEnd && p.endDate >= rangeStart;
+      const hasMile = (p.milestones||[]).some(m => m.date >= rangeStart && m.date <= rangeEnd);
+      return overlap || hasMile;
     });
 
+    const navHTML = `<div class="twoweek-nav">
+      <button class="cal-nav-btn" id="tw-prev">&#8592;</button>
+      <div class="twoweek-range-label">${fmtShort(rangeStart)} – ${fmtShort(rangeEnd)}, ${days[0].getFullYear()}</div>
+      <button class="cal-nav-btn" id="tw-next">&#8594;</button>
+    </div>`;
+
     if (!visible.length) {
-      return `<div class="twoweek-container">
-        ${twoweekNav(days)}
-        <div class="twoweek-empty">No programs active during this period.</div>
-      </div>`;
+      return `<div class="twoweek-container">${navHTML}<div class="twoweek-empty">No programs active during this period.</div></div>`;
     }
 
-    // Column headers
     const headers = days.map(d => {
-      const dk      = dateKey(d);
+      const dk = dateKey(d);
       const isToday = dk === todayKey;
       const isWknd  = d.getDay() === 0 || d.getDay() === 6;
-      return `<th class="twoweek-th-day ${isToday ? 'is-today' : ''} ${isWknd ? 'is-weekend' : ''}">
-        <span class="tw-day-num">${d.getDate()}</span>
-        ${DAYS[d.getDay()]}
+      return `<th class="twoweek-th-day ${isToday?'is-today':''} ${isWknd?'is-weekend':''}">
+        <span class="tw-day-num">${d.getDate()}</span>${DAYS[d.getDay()]}
       </th>`;
     }).join('');
 
-    // Rows
     const rows = visible.map(prog => {
-      const progColor = colorFor(prog);
+      const c = colorFor(prog);
       const msMap = {};
       (prog.milestones||[]).forEach(m => { msMap[m.date] = m; });
 
+      const statusColor = prog.status==='active' ? 'var(--active-border)' :
+                          prog.status==='on-hold' ? 'var(--hold-border)' : 'var(--text-muted)';
+
       const cells = days.map(d => {
-        const dk     = dateKey(d);
+        const dk = dateKey(d);
         const isToday = dk === todayKey;
         const isWknd  = d.getDay() === 0 || d.getDay() === 6;
-        const active  = prog.startDate && prog.endDate && dk >= prog.startDate && dk <= prog.endDate;
-        const ms      = msMap[dk];
-
-        return `<td class="twoweek-day-cell ${isToday ? 'is-today' : ''} ${isWknd ? 'is-weekend' : ''}">
-          ${active ? `<div class="twoweek-bar-bg" style="background:${progColor}"></div>` : ''}
+        const active  = prog.startDate <= dk && prog.endDate >= dk;
+        const ms = msMap[dk];
+        return `<td class="twoweek-day-cell ${isToday?'is-today':''} ${isWknd?'is-weekend':''}">
+          ${active ? `<div class="twoweek-bar-bg" style="background:${c}"></div>` : ''}
           ${ms ? `<div class="twoweek-milestone-bubble">
             <div class="tw-bubble-dot" style="background:${
               ms.completed ? 'var(--milestone-done)' :
-              daysLeft(ms.date) < 0 ? 'var(--milestone-overdue)' : progColor
+              daysLeft(ms.date) < 0 ? 'var(--milestone-overdue)' : c
             }"></div>
             <div class="tw-bubble-label">${ms.name}</div>
           </div>` : ''}
         </td>`;
       }).join('');
 
-      const statusColor = prog.status === 'active' ? 'var(--active-border)' :
-                          prog.status === 'on-hold' ? 'var(--hold-border)' : 'var(--text-muted)';
-
       return `<tr class="twoweek-row">
-        <td class="twoweek-prog-cell" style="border-left: 3px solid ${progColor}">
+        <td class="twoweek-prog-cell" style="border-left:3px solid ${c}">
           ${prog.name}
           <span class="twoweek-prog-status" style="color:${statusColor}">${STATUS_LABELS[prog.status]||prog.status}</span>
-        </td>
-        ${cells}
+        </td>${cells}
       </tr>`;
     }).join('');
 
     return `<div class="twoweek-container">
-      ${twoweekNav(days)}
+      ${navHTML}
       <div class="twoweek-wrap">
         <table class="twoweek-table">
-          <thead>
-            <tr>
-              <th class="twoweek-th-prog">Program</th>
-              ${headers}
-            </tr>
-          </thead>
+          <thead><tr><th class="twoweek-th-prog">Program</th>${headers}</tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>
-    </div>`;
-  }
-
-  function twoweekNav(days) {
-    return `<div class="twoweek-nav">
-      <button class="cal-nav-btn" id="tw-prev">&#8592;</button>
-      <div class="twoweek-range-label">${fmtShort(dateKey(days[0]))} – ${fmtShort(dateKey(days[13]))}, ${days[0].getFullYear()}</div>
-      <button class="cal-nav-btn" id="tw-next">&#8594;</button>
     </div>`;
   }
 
@@ -1081,12 +1066,10 @@
     } else if (currentView === 'monthly') {
       content.innerHTML = renderMonthly();
       document.getElementById('cal-prev').onclick = () => {
-        calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
-        render();
+        calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } render();
       };
       document.getElementById('cal-next').onclick = () => {
-        calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
-        render();
+        calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } render();
       };
     } else {
       content.innerHTML = renderTwoWeek();
@@ -1094,17 +1077,18 @@
       document.getElementById('tw-next').onclick = () => { twOffset++; render(); };
     }
 
+    const lastUpd = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('refresh-bar').textContent =
-      `Last updated: ${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})} · Auto-refreshes every 5 minutes`;
+      `Last updated: ${lastUpd} · Auto-refreshes every 5 minutes`;
   }
 
   // ── Clock ─────────────────────────────────────────────────────────────
   function updateClock() {
     const n = new Date();
     document.getElementById('clock').textContent =
-      n.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:true });
+      n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
     document.getElementById('date-display').textContent =
-      n.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   }
   updateClock();
   setInterval(updateClock, 1000);
@@ -1127,12 +1111,20 @@
     render();
   });
 
+  document.getElementById('inactive-toggle').addEventListener('click', () => {
+    hideInactive = !hideInactive;
+    const btn = document.getElementById('inactive-toggle');
+    btn.textContent = hideInactive ? 'Show All' : 'Hide Completed';
+    btn.classList.toggle('active-filter', hideInactive);
+    render();
+  });
+
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const cur = document.documentElement.getAttribute('data-theme') || 'light';
     applyTheme(cur === 'dark' ? 'light' : 'dark');
   });
 
-  // ── Boot & auto-refresh ───────────────────────────────────────────────
+  // ── Boot ──────────────────────────────────────────────────────────────
   render();
   setInterval(() => location.reload(), 5 * 60 * 1000);
 </script>
