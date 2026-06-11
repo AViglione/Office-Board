@@ -4,6 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>What's Going On — GFN</title>
+  <script>
+  // ── PROGRAM DATA — edit this block to update the dashboard ────────────
+  window.PROGRAMS = [
+    {
+      "id": "1",
+      "name": "Youth Leadership Academy",
+      "status": "active",
+      "startDate": "2026-02-01",
+      "endDate": "2026-06-30",
+      "lead": "Maria Santos",
+      "milestones": [
+        { "name": "Cohort Selection",   "date": "2026-01-25", "completed": true  },
+        { "name": "Kickoff Session",    "date": "2026-02-08", "completed": true  },
+        { "name": "Mid-Program Review", "date": "2026-04-15", "completed": false },
+        { "name": "Graduation Ceremony","date": "2026-06-28", "completed": false }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Community Garden Initiative",
+      "status": "active",
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "lead": "James Okafor",
+      "milestones": [
+        { "name": "Site Agreements Signed", "date": "2026-02-20", "completed": true  },
+        { "name": "Spring Planting",        "date": "2026-04-01", "completed": false },
+        { "name": "Summer Harvest Event",   "date": "2026-07-19", "completed": false },
+        { "name": "Season Wrap-up",         "date": "2026-11-01", "completed": false }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Digital Literacy Workshop Series",
+      "status": "on-hold",
+      "startDate": "2026-01-10",
+      "endDate": "2026-12-20",
+      "lead": "Priya Nair",
+      "milestones": [
+        { "name": "Curriculum Finalized",        "date": "2026-01-05", "completed": true  },
+        { "name": "Workshop 1 – Basics",         "date": "2026-01-18", "completed": true  },
+        { "name": "Workshop 2 – Internet Safety","date": "2026-03-15", "completed": false },
+        { "name": "Workshop 3 – Job Applications","date": "2026-05-17","completed": false }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Annual Fundraiser Gala",
+      "status": "active",
+      "startDate": "2026-04-01",
+      "endDate": "2026-09-20",
+      "lead": "Derek Thompson",
+      "milestones": [
+        { "name": "Venue Booked",        "date": "2026-03-10", "completed": true  },
+        { "name": "Sponsorship Outreach","date": "2026-05-01", "completed": false },
+        { "name": "Ticket Sales Open",   "date": "2026-06-15", "completed": false },
+        { "name": "Gala Night",          "date": "2026-09-19", "completed": false }
+      ]
+    }
+  ];
+  // ─────────────────────────────────────────────────────────────────────
+  </script>
   <style>
     :root {
       --bg: #f5f6f8;
@@ -496,23 +558,22 @@
       : '<div class="empty">No programs found in programs.json</div>';
   }
 
-  // ── Fetch & auto-refresh ───────────────────────────────────────────────
-  async function loadData() {
-    try {
-      const res = await fetch(`programs.json?v=${Date.now()}`);
-      if (!res.ok) throw new Error(res.statusText);
-      const data = await res.json();
-      renderAll(data);
+  // ── Load & auto-refresh ───────────────────────────────────────────────
+  function loadData() {
+    // Reload the page to pick up any changes to programs.js
+    if (window.PROGRAMS) {
+      renderAll(window.PROGRAMS);
       document.getElementById('refresh-bar').textContent =
         `Last updated: ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} · Auto-refreshes every 5 minutes`;
-    } catch (e) {
+    } else {
       document.getElementById('grid').innerHTML =
-        `<div class="empty">Could not load programs.json — ${e.message}</div>`;
+        `<div class="empty">No data found — make sure programs.js is in the same folder as index.html</div>`;
     }
   }
 
   loadData();
-  setInterval(loadData, 5 * 60 * 1000);
+  // Full page reload every 5 minutes picks up any new programs.js deployed to GitHub Pages
+  setInterval(() => location.reload(), 5 * 60 * 1000);
 </script>
 </body>
 </html>
