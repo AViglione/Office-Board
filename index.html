@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What's Going On — GFN</title>
+  <script>
+  // ── PROGRAM DATA — edit this block to update the dashboard ────────────
+  window.PROGRAMS = [
+    {
+      "id": "1",
+      "name": "Youth Leadership Academy",
+      "status": "active",
+      "startDate": "2026-02-01",
+      "endDate": "2026-06-30",
+      "lead": "Maria Santos",
+      "milestones": [
+        { "name": "Cohort Selection",   "date": "2026-01-25", "completed": true  },
+        { "name": "Kickoff Session",    "date": "2026-02-08", "completed": true  },
+        { "name": "Mid-Program Review", "date": "2026-04-15", "completed": false },
+        { "name": "Graduation Ceremony","date": "2026-06-28", "completed": false }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Community Garden Initiative",
+      "status": "active",
+      "startDate": "2026-03-01",
+      "endDate": "2026-11-30",
+      "lead": "James Okafor",
+      "milestones": [
+        { "name": "Site Agreements Signed", "date": "2026-02-20", "completed": true  },
+        { "name": "Spring Planting",        "date": "2026-04-01", "completed": false },
+        { "name": "Summer Harvest Event",   "date": "2026-07-19", "completed": false },
+        { "name": "Season Wrap-up",         "date": "2026-11-01", "completed": false }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Digital Literacy Workshop Series",
+      "status": "on-hold",
+      "startDate": "2026-01-10",
+      "endDate": "2026-12-20",
+      "lead": "Priya Nair",
+      "milestones": [
+        { "name": "Curriculum Finalized",        "date": "2026-01-05", "completed": true  },
+        { "name": "Workshop 1 – Basics",         "date": "2026-01-18", "completed": true  },
+        { "name": "Workshop 2 – Internet Safety","date": "2026-03-15", "completed": false },
+        { "name": "Workshop 3 – Job Applications","date": "2026-05-17","completed": false }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Annual Fundraiser Gala",
+      "status": "active",
+      "startDate": "2026-04-01",
+      "endDate": "2026-09-20",
+      "lead": "Derek Thompson",
+      "milestones": [
+        { "name": "Venue Booked",        "date": "2026-03-10", "completed": true  },
+        { "name": "Sponsorship Outreach","date": "2026-05-01", "completed": false },
+        { "name": "Ticket Sales Open",   "date": "2026-06-15", "completed": false },
+        { "name": "Gala Night",          "date": "2026-09-19", "completed": false }
+      ]
+    }
+  ];
+  // ─────────────────────────────────────────────────────────────────────
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --border: #e2e5ea;
+      --text-primary: #1a1d23;
+      --text-secondary: #5a6270;
+      --text-muted: #9099a8;
+      --active-bg: #eafaf1;
+      --active-border: #27ae60;
+      --active-dot: #27ae60;
+      --hold-bg: #fff8e6;
+      --hold-border: #f39c12;
+      --hold-dot: #f39c12;
+      --completed-bg: #f0f2f5;
+      --completed-border: #aab0bb;
+      --completed-dot: #aab0bb;
+      --milestone-done: #27ae60;
+      --milestone-upcoming: #3b82f6;
+      --milestone-overdue: #e74c3c;
+      --header-height: 80px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #ffffff;
+      border-bottom: 2px solid var(--border);
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+
+    .logo-sub {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .header-right {
+      text-align: right;
+    }
+
+    #clock {
+      font-size: 32px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-primary);
+    }
+
+    #date-display {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex;
+      gap: 24px;
+      padding: 16px 40px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .stat-chip .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .stat-chip .count {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+      padding: 32px 40px;
+    }
+
+    /* ── Program Card ── */
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: box-shadow 0.2s;
+    }
+
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .status-badge {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1.5px solid transparent;
+    }
+
+    .status-badge .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .status-badge.active {
+      background: var(--active-bg);
+      border-color: var(--active-border);
+      color: var(--active-border);
+    }
+    .status-badge.active .dot { background: var(--active-dot); }
+
+    .status-badge.on-hold {
+      background: var(--hold-bg);
+      border-color: var(--hold-border);
+      color: var(--hold-border);
+    }
+    .status-badge.on-hold .dot { background: var(--hold-dot); }
+
+    .status-badge.completed {
+      background: var(--completed-bg);
+      border-color: var(--completed-border);
+      color: var(--completed-border);
+    }
+    .status-badge.completed .dot { background: var(--completed-dot); }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .meta-icon { font-size: 14px; }
+
+    /* ── Progress bar ── */
+    .progress-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+      transition: width 0.6s ease;
+    }
+
+    .progress-fill.complete { background: linear-gradient(90deg, #27ae60, #16a085); }
+
+    /* ── Milestones ── */
+    .milestones-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .milestone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .milestone {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .milestone-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .milestone-icon.done { background: var(--milestone-done); color: white; }
+    .milestone-icon.upcoming { background: #dbeafe; color: var(--milestone-upcoming); border: 1.5px solid var(--milestone-upcoming); }
+    .milestone-icon.overdue { background: #fde8e8; color: var(--milestone-overdue); border: 1.5px solid var(--milestone-overdue); }
+
+    .milestone-name {
+      flex: 1;
+      color: var(--text-primary);
+    }
+
+    .milestone-name.done {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .milestone-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .milestone-date.overdue { color: var(--milestone-overdue); font-weight: 600; }
+
+    /* ── Lead tag ── */
+    .lead-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* ── Footer / refresh ── */
+    .refresh-bar {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Empty state ── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    /* ── Pulse animation for Active dot ── */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .status-badge.active .dot { animation: pulse 2s infinite; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="logo-text">What's Going On</span>
+    <span class="logo-sub">GFN Programs Dashboard</span>
+  </div>
+  <div class="header-right">
+    <div id="clock">--:--</div>
+    <div id="date-display">Loading…</div>
+  </div>
+</header>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<main class="grid" id="grid"></main>
+
+<div class="refresh-bar" id="refresh-bar">Auto-refreshes every 5 minutes</div>
+
+<script>
+  // ── Helpers ──────────────────────────────────────────────────────────
+  const STATUS_LABELS = { active: 'Active', 'on-hold': 'On Hold', completed: 'Completed' };
+
+  function fmt(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function daysLeft(dateStr) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const end = new Date(dateStr + 'T00:00:00');
+    return Math.round((end - today) / 86400000);
+  }
+
+  function programProgress(program) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const start = new Date(program.startDate + 'T00:00:00');
+    const end   = new Date(program.endDate   + 'T00:00:00');
+    if (today <= start) return 0;
+    if (today >= end)   return 100;
+    return Math.round(((today - start) / (end - start)) * 100);
+  }
+
+  function milestoneState(m) {
+    if (m.completed) return 'done';
+    const diff = daysLeft(m.date);
+    return diff < 0 ? 'overdue' : 'upcoming';
+  }
+
+  // ── Clock ─────────────────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {
+      hour: '2-digit', minute: '2-digit', hour12: true
+    });
+    document.getElementById('date-display').textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── Render ────────────────────────────────────────────────────────────
+  function renderStats(programs) {
+    const counts = { active: 0, 'on-hold': 0, completed: 0 };
+    programs.forEach(p => counts[p.status] = (counts[p.status] || 0) + 1);
+    const bar = document.getElementById('stats-bar');
+    bar.innerHTML = [
+      { key: 'active',    label: 'Active',    color: '#27ae60' },
+      { key: 'on-hold',   label: 'On Hold',   color: '#f39c12' },
+      { key: 'completed', label: 'Completed', color: '#aab0bb' }
+    ].map(({ key, label, color }) => `
+      <div class="stat-chip">
+        <div class="dot" style="background:${color}"></div>
+        <span class="count">${counts[key] || 0}</span>
+        <span>${label}</span>
+      </div>
+    `).join('<div style="flex:1"></div>') +
+    `<div class="stat-chip" style="margin-left:auto">
+      <span style="font-size:13px;color:var(--text-muted)">${programs.length} program${programs.length !== 1 ? 's' : ''} total</span>
+    </div>`;
+  }
+
+  function renderCard(p) {
+    const progress = programProgress(p);
+    const dl = daysLeft(p.endDate);
+    const isComplete = p.status === 'completed';
+
+    const daysLabel = isComplete ? 'Ended' :
+                      dl < 0     ? `Ended ${Math.abs(dl)}d ago` :
+                      dl === 0   ? 'Ends today' :
+                                   `${dl}d remaining`;
+
+    const milestones = (p.milestones || []).slice(0, 4);
+
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${p.name}</div>
+          <div class="status-badge ${p.status}">
+            <div class="dot"></div>
+            ${STATUS_LABELS[p.status] || p.status}
+          </div>
+        </div>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <span class="meta-icon">📅</span>
+            <span>${fmt(p.startDate)} – ${fmt(p.endDate)}</span>
+          </div>
+          ${p.lead ? `<div class="meta-item"><span class="lead-tag">👤 ${p.lead}</span></div>` : ''}
+          <div class="meta-item" style="margin-left:auto;font-weight:700;color:${dl < 7 && !isComplete ? '#e74c3c' : 'var(--text-muted)'}">
+            ${daysLabel}
+          </div>
+        </div>
+
+        <div class="progress-row">
+          <div class="progress-label">
+            <span>Timeline Progress</span>
+            <span>${progress}%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill ${progress >= 100 ? 'complete' : ''}" style="width:${progress}%"></div>
+          </div>
+        </div>
+
+        ${milestones.length ? `
+        <div>
+          <div class="milestones-label">Milestones</div>
+          <div class="milestone-list">
+            ${milestones.map(m => {
+              const state = milestoneState(m);
+              const icon = state === 'done' ? '✓' : state === 'overdue' ? '!' : '○';
+              return `
+                <div class="milestone">
+                  <div class="milestone-icon ${state}">${icon}</div>
+                  <span class="milestone-name ${state}">${m.name}</span>
+                  <span class="milestone-date ${state === 'overdue' ? 'overdue' : ''}">${fmt(m.date)}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  function renderAll(programs) {
+    renderStats(programs);
+    const grid = document.getElementById('grid');
+    // Sort: active first, then on-hold, then completed
+    const order = { active: 0, 'on-hold': 1, completed: 2 };
+    const sorted = [...programs].sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
+    grid.innerHTML = sorted.length
+      ? sorted.map(renderCard).join('')
+      : '<div class="empty">No programs found in programs.json</div>';
+  }
+
+  // ── Load & auto-refresh ───────────────────────────────────────────────
+  function loadData() {
+    // Reload the page to pick up any changes to programs.js
+    if (window.PROGRAMS) {
+      renderAll(window.PROGRAMS);
+      document.getElementById('refresh-bar').textContent =
+        `Last updated: ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} · Auto-refreshes every 5 minutes`;
+    } else {
+      document.getElementById('grid').innerHTML =
+        `<div class="empty">No data found — make sure programs.js is in the same folder as index.html</div>`;
+    }
+  }
+
+  loadData();
+  // Full page reload every 5 minutes picks up any new programs.js deployed to GitHub Pages
+  setInterval(() => location.reload(), 5 * 60 * 1000);
+</script>
+</body>
+</html>
